@@ -1,0 +1,13 @@
+.container {
+    max-width: 600px;
+    margin-top: 50px;
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+.btn-primary {
+    border-radius: 10px;
+    width: 100%;
+}
