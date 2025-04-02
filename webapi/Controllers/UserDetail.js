@@ -21,11 +21,11 @@ const UserDetail = async (req, res) => {
     try {
         const { First_Name, Last_Name, Mobile_No, Email, LoginId, Password, Street,City,State, Country } = req.body;
         const existuser = await User.findOne({ Email });
-        if (existuser) {
-            return res.status(400).json({ message: "user already exist" });
-        }
         if (!validator.isEmail(Email)) {
             return res.status(400).json({ message: "invalid email plz provide a valid mail" });
+        }
+        if (existuser) {
+            return res.status(400).json({ message: "user already exist" });
         }
         if (!validId (LoginId)) {
             return res.status(400).json({
