@@ -7,7 +7,7 @@ const Database = require('./config/db');
 
 const app = express();
 app.use(cors({
-    origin: 'https://super-donut-b3e0d3.netlify.app',
+    origin: 'https://cheerful-blancmange-445c4a.netlify.app',
     credentials: true
 }));
 Database();
