@@ -33,7 +33,7 @@ function HomePage() {
     const validateForm = () => {
         let newErrors = {};
 
-        if (!Form.First_Name || !/^[a-zA-Z\s]+$/.test(Form.First_Name));
+        if (!Form.First_Name || !/^[a-zA-Z\s]+$/.test(Form.First_Name))
             newErrors.First_Name = "Provide a proper Name";
         if (!Form.Last_Name || !/^[a-zA-Z\s]+$/.test(Form.Last_Name))
             newErrors.Last_Name = "Provide a proper Name";
