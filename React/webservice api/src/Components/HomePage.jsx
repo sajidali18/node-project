@@ -4,8 +4,12 @@ import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import "./HomePage.css";
+import { io } from 'socket.io-client';
+
+const socket = io("https://node-project-1-bpts.onrender.com");
 
 function HomePage() {
+
     const navigate = useNavigate();
     const [Form, setForm] = useState({
         First_Name: "",
@@ -21,6 +25,15 @@ function HomePage() {
     });
 
     const [errors, setErrors] = useState({});
+    useEffect(() => {
+        socket.on("connect", () => {
+            console.log("Connected to Socket.io server:", socket.id);
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
 
     const handlechange = (e) => {
         setForm({
@@ -73,6 +86,7 @@ function HomePage() {
 
             if (response.data.success) {
                 toast.success("Data saved successfully!", { position: "top-center" });
+                socket.emit("joinRoom", "live users");
 
                 setForm({
                     First_Name: "",
