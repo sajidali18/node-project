@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import 'react-toastify/dist/ReactToastify.css';
 import './HomePage.css'
+import {ToastContainer,toast} from 'react-toastify'
 
 function HomePage() {
     const navigate = useNavigate();
@@ -28,20 +30,18 @@ function HomePage() {
         e.preventDefault();
         try {
             // console.log(Form)
-            const response = await axios.post('http://localhost:2000/data/save', Form, {
+            const response = await axios.post('https://node-project-1-bpts.onrender.com/data/save', Form, {
                 withCredentials: true
             });
             if (response.data.success) {
-                alert('data saved in database')
-                // navigate('/otp');
+                toast.success('Data saved successfully!', { position: "top-center" });
             }
             else {
-                alert('server error plz try again');
-                // navigate('/login')
+                toast.error('Server error, please try again!', { position: "top-center" });
             }
         }
         catch (error) {
-            console.log("error", error.response);
+            toast.error('Error: ' + (error.response?.data?.message || 'Something went wrong!'), { position: "top-center" });
         }
         setForm({
             First_Name: '',
@@ -58,6 +58,7 @@ function HomePage() {
     }
         return (
             <div className="container">
+                <ToastContainer/>
                 <div className="card shadow p-4">
                     <h3 className="text-center mb-4">User Registration</h3>
                     <form id="userForm" onSubmit={handlesubmit}>

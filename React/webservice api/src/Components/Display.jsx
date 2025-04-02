@@ -6,7 +6,7 @@ function Display() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:2000/data/find', { withCredentials: true });
+            const response = await axios.get('https://node-project-1-bpts.onrender.com/data/find', { withCredentials: true });
             setUsers(response.data); 
         } catch (error) {
             console.error("Error fetching users:", error);
