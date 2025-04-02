@@ -14,13 +14,13 @@ const app = express();
 const server = http.createServer(app);
 const skt = new Server(server, {
     cors: {
-        origin: 'https://stately-nougat-74e5b3.netlify.app',
+        origin: 'https://phenomenal-moxie-0f5f18.netlify.app',
         credentials: true,
     },
 });
 
 app.use(cors({
-    origin: 'https://stately-nougat-74e5b3.netlify.app',
+    origin: 'https://phenomenal-moxie-0f5f18.netlify.app',
     credentials: true
 }));
 
@@ -38,6 +38,7 @@ skt.on('connection', (socket) => {
     console.log('user connected', socket.id);
     socket.on('joinRoom', (room) => {
         socket.join(room);
+        // console.log("sajid ali")
         console.log(`User ${socket.id} joined room : ${room}`);
     });
     socket.on('disconnect', () => {
