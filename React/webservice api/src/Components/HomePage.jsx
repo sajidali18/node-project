@@ -33,8 +33,10 @@ function HomePage() {
     const validateForm = () => {
         let newErrors = {};
 
-        if (!Form.First_Name) newErrors.First_Name = "First Name is required";
-        if (!Form.Last_Name) newErrors.Last_Name = "Last Name is required";
+        if (!Form.First_Name || !/^[a-zA-Z\s]+$/.test(Form.City));
+            newErrors.First_Name = "Provide a proper Name";
+        if (!Form.Last_Name || !/^[a-zA-Z\s]+$/.test(Form.City))
+            newErrors.Last_Name = "Provide a proper Name";
         if (!Form.Mobile_No || !/^\d{10}$/.test(Form.Mobile_No))
             newErrors.Mobile_No = "Enter a valid 10-digit Mobile No";
         if (!Form.Email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(Form.Email))
