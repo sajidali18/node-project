@@ -14,13 +14,19 @@ const app = express();
 const server = http.createServer(app);
 const skt = new Server(server, {
     cors: {
-        origin: 'https://phenomenal-moxie-0f5f18.netlify.app',
+        origin: ['https://phenomenal-moxie-0f5f18.netlify.app',
+            'http://localhost:5173',
+            "http://localhost:3000",
+        ],
         credentials: true,
     },
 });
 
 app.use(cors({
-    origin: 'https://phenomenal-moxie-0f5f18.netlify.app',
+    origin: ['https://phenomenal-moxie-0f5f18.netlify.app',
+        ' http://localhost:5173',
+        "http://localhost:3000",
+    ],
     credentials: true
 }));
 
