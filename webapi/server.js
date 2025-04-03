@@ -6,6 +6,7 @@ const { Server } = require('socket.io')
 const UserRoutes = require('./Routes/UserRoutes');
 const Database = require('./config/db');
 const { Socket } = require('dgram');
+const user = require('./models/UserSchema');
 
 dotenv.config();
 Database();
@@ -53,7 +54,7 @@ app.use('/data', UserRoutes);
 
 skt.on('connection', (socket) => {
     console.log('user connected', socket.id);
-    socket.on('joinRoom', (room) => {
+    socket.on('joinRoom', ({ room, user }) => {
         socket.join(room);
         // console.log("sajid ali")
         console.log(`User ${socket.id} joined room : ${room}`);
