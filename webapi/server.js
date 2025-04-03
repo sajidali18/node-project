@@ -22,9 +22,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// app.options('/*', cors(corsOptions));
 
-// Explicitly set CORS headers in middleware
 app.use(express.json());
 app.use((req, res, next) => {
     const origin = req.headers.origin;
@@ -47,6 +46,7 @@ app.use((req, res, next) => {
     req.skt = skt;
     next();
 });
+
 app.get('/', (req, res) => {
     res.send("hello this side from is server side");
 })
@@ -66,7 +66,8 @@ app.use('/data', UserRoutes);
 
 skthandler(skt);
 
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
+
 server.listen(port, () => {
     console.log(`server listening on ${port}`);
 });
