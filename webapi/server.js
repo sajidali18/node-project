@@ -14,17 +14,24 @@ const app = express();
 const server = http.createServer(app);
 const allowedOrigins = [
     "http://localhost:5173",  // Vite frontend (localhost)
-    "http://localhost:3000",  // Create React App frontend (localhost)
-    "https://phenomenal-moxie-0f5f18.netlify.app"  // Deployed frontend (Netlify)
+    "http://localhost:3000",  // CRA frontend (localhost)
+    "https://phenomenal-moxie-0f5f18.netlify.app"  // Deployed frontend
 ];
 
-app.use(cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true
-}));
-
-app.options("*", cors());
+// Explicitly set CORS headers in middleware
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+    }
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200);
+    }
+    next();
+});
 app.use(express.json());
 const skt = new Server(server, {
     cors: {
