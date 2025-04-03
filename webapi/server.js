@@ -6,7 +6,7 @@ const { Server } = require('socket.io')
 const UserRoutes = require('./Routes/UserRoutes');
 const Database = require('./config/db');
 const { Socket } = require('dgram');
-const user = require('./models/UserSchema');
+const skthandler = require('./Controllers/Socket');
 
 dotenv.config();
 Database();
@@ -52,17 +52,20 @@ app.get('/', (req, res) => {
 })
 app.use('/data', UserRoutes);
 
-skt.on('connection', (socket) => {
-    console.log('user connected', socket.id);
-    socket.on('joinRoom', ({ room, user }) => {
-        socket.join(room);
-        // console.log("sajid ali")
-        console.log(`User ${socket.id} joined room : ${room}`);
-    });
-    socket.on('disconnect', () => {
-        console.log(`user disconnected ${socket.id}`);
-    });
-});
+// skt.on('connection', (socket) => {
+//     console.log('user connected', socket.id);
+//     socket.on('joinRoom', ({ room, user }) => {
+//         socket.join(room);
+//         // console.log("sajid ali")
+//         console.log(`User ${socket.id} joined room : ${room}`);
+//     });
+//     socket.on('disconnect', () => {
+//         console.log(`user disconnected ${socket.id}`);
+//     });
+// });
+
+skthandler(skt);
+
 const port = process.env.PORT;
 app.use(express.json());
 
