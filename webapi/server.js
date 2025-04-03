@@ -67,8 +67,6 @@ app.use('/data', UserRoutes);
 skthandler(skt);
 
 const port = process.env.PORT;
-app.use(express.json());
-
 server.listen(port, () => {
     console.log(`server listening on ${port}`);
 });
