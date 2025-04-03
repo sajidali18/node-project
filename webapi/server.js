@@ -12,25 +12,27 @@ Database();
 
 const app = express();
 const server = http.createServer(app);
+const allowedOrigins = [
+    "http://localhost:5173",  // Vite frontend (localhost)
+    "http://localhost:3000",  // Create React App frontend (localhost)
+    "https://phenomenal-moxie-0f5f18.netlify.app"  // Deployed frontend (Netlify)
+];
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true
+}));
+
+app.options("*", cors());
+app.use(express.json());
 const skt = new Server(server, {
     cors: {
-        origin: ['https://phenomenal-moxie-0f5f18.netlify.app',
-            'http://localhost:5173',
-            "http://localhost:3000",
-        ],
+        origin: allowedOrigins,
         credentials: true,
     },
 });
 
-app.use(cors({
-    origin: ['https://phenomenal-moxie-0f5f18.netlify.app',
-        ' http://localhost:5173',
-        "http://localhost:3000",
-    ],
-    credentials: true
-}));
-
-app.use(express.json());
 app.use((req, res, next) => {
     req.skt = skt;
     next();
