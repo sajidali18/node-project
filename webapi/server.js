@@ -13,50 +13,61 @@ Database();
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Allowed origins
-const allowedOrigins = ["http://localhost:5173", "https://phenomenal-moxie-0f5f18.netlify.app"];
+// ✅ Define allowed origins
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://phenomenal-moxie-0f5f18.netlify.app"
+];
+
+// ✅ CORS configuration
 const corsOptions = {
     origin: allowedOrigins,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 };
 
-// ✅ Apply CORS properly
+// ✅ Apply CORS middleware for HTTP requests
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle preflight requests
+app.options('*', cors(corsOptions));
 
-// ✅ Middleware
-app.use(express.json());
+// ✅ Apply middleware to set headers for all responses
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    }
+    next();
+});
 
-// ✅ Initialize Socket.io with CORS
+// ✅ Initialize Socket.io with CORS settings
 const skt = new Server(server, {
     cors: {
         origin: allowedOrigins,
-        methods: ["GET", "POST"],
         credentials: true
     }
 });
 
-// ✅ Attach socket to request object
+// ✅ Middleware to attach `skt` to `req`
 app.use((req, res, next) => {
     req.skt = skt;
     next();
 });
 
-// ✅ Test route
+// ✅ Define Routes
 app.get('/', (req, res) => {
-    res.send("Hello, this is the server side");
+    res.send("Hello from the server!");
 });
-
-// ✅ Routes
 app.use('/data', UserRoutes);
 
-// ✅ Handle Socket.io events
+// ✅ Socket.io event handling
 skthandler(skt);
 
-// ✅ Start server
 const port = process.env.PORT || 5000;
+
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
