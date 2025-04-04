@@ -7,7 +7,7 @@ const skthandler = (skt) => {
         // Handle user joining a room
         socket.on('joinRoom', ({ room, user }) => {
             socket.join(room);
-            userdata[socket.id] = { email: user.Email, name: user.First_Name, socket_id: socket.id };
+            userdata[socket.id] = { Email: user.Email, Name: user.First_Name, socket_id: socket.id };
             skt.to(room).emit('updateUsers', Object.values(userdata));
             console.log('Current users:', userdata);
         });
@@ -15,7 +15,7 @@ const skthandler = (skt) => {
         // Handle request for users in a room
         socket.on('getUsersInRoom', (room) => {
             const usersInRoom = Object.values(userdata).filter(user => user.room === room);
-            socket.emit('updateUsers', usersInRoom);
+            skt.to(room).emit('updateUsers', usersInRoom);
         });
 
         // Handle user disconnectn
