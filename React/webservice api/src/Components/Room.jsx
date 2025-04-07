@@ -10,13 +10,19 @@ const Room = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const location = useLocation(); 
-    const email = location.state?.email || localStorage.getItem("email");
+    const [email, setEmail] = useState(location.state?.email || localStorage.getItem("email"));
     console.log(email);
+    useEffect(() => {
+        // Save email from location state to localStorage (if available)
+        if (location.state?.email) {
+            localStorage.setItem("email", location.state.email);
+            setEmail(location.state.email);
+        }
+    }, [location.state]);
 
     useEffect(() => {
-        if (email) {
-            localStorage.setItem("email", email);
-        }
+        if (!email)
+            return;
         socket.on("connect", () => {
             if (email) {
                 socket.emit("joinLiveUsersRoom", { Email: email });

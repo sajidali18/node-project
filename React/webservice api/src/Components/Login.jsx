@@ -24,6 +24,7 @@ function LoginPage() {
             );
 
             if (response.data.success) {
+                localStorage.setItem("email", response.data.email); // or whatever your response gives
                 navigate("/room", { state: { email: form.Email } });
             } else {
                 alert("Invalid credentials, please try again.");
