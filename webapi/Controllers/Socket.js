@@ -1,31 +1,45 @@
-const userdata = {};
+// 🔧 Socket Controller File (Controllers/Socket.js)
 
-const skthandler = (skt) => {
-    skt.on('connection', (socket) => {
-        console.log('User connected:', socket.id);
+const User = require('../models/UserSchema');
 
-        // Handle user joining a room
-        socket.on('joinRoom', ({ room, user }) => {
-            socket.join(room);
-            userdata[socket.id] = { Email: user.Email, Name: user.First_Name, socket_id: socket.id };
-            skt.to(room).emit('updateUsers', Object.values(userdata));
-            console.log('Current users:', userdata);
-        });
+let liveUsers = []; // Store live users in memory
 
-        // Handle request for users in a room
-        socket.on('getUsersInRoom', (room) => {
-            const usersInRoom = Object.values(userdata).filter(user => user.room === room);
-            skt.to(room).emit('updateUsers', usersInRoom);
-        });
+const skthandler = (io) => {
+    io.on("connection", (socket) => {
+        console.log("User connected:", socket.id);
 
-        // Handle user disconnectn
-        socket.on('disconnect', () => {
-            const user = userdata[socket.id];
-            if (user) {
-                delete userdata[socket.id];
-                skt.to(user.room).emit('updateUsers', Object.values(userdata));
+        socket.on("joinLiveUsersRoom", async ({ Emailmail }) => {
+            // Update socketId in DB
+            await User.findOneAndUpdate({ Email: Email }, { socketId: socket.id });
+
+            const user = await User.findOne({ Email: Email });
+            if (!user) return;
+
+            socket.join("live users");
+
+            // Add to local memory if not already present
+            if (!liveUsers.find(u => u.Email === user.Email)) {
+                liveUsers.push({
+                    First_Name: user.First_Name,
+                    Last_Name: user.Last_Name,
+                    Email: user.Email,
+                    socketId: socket.id
+                });
             }
-            console.log('User disconnected:', socket.id);
+
+            io.to("live users").emit("updateUsers", liveUsers);
+        });
+
+        socket.on("getUserDetails", async (socketId, callback) => {
+            const user = await User.findOne({ socketId });
+            callback(user);
+        });
+
+        socket.on("disconnect", async () => {
+            console.log("User disconnected:", socket.id);
+            liveUsers = liveUsers.filter(u => u.socketId !== socket.id);
+            await User.findOneAndUpdate({ socketId: socket.id }, { socketId: null });
+            io.to("live users").emit("updateUsers", liveUsers);
         });
     });
 };

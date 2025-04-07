@@ -53,6 +53,9 @@ const userschema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now 
+    },
+    socketId: {
+    type: String
     }
 })
 const User = mongoose.model("detail", userschema);

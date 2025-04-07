@@ -59,8 +59,6 @@ const UserDetail = async (req, res) => {
         
         await newUser.save();
         // console.log(newUser);
-        req.skt.emit('newUser', newUser);
-        req.skt.to('live users').emit('userJoined', newUser);
         
         return res.status(201).json({ message: "data stored successfully ", success: true });
 
