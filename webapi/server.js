@@ -11,6 +11,7 @@ dotenv.config();
 Database();
 
 const app = express();
+app.use(express.json());
 const server = http.createServer(app);
 
 // ✅ Define allowed origins
