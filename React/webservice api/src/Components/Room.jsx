@@ -9,11 +9,14 @@ const Room = () => {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const location = useLocation();
-    const email = location.state?.email;
+    const location = useLocation(); 
+    const email = location.state?.email || localStorage.getItem("email");
     console.log(email);
 
     useEffect(() => {
+        if (email) {
+            localStorage.setItem("email", email);
+        }
         socket.on("connect", () => {
             if (email) {
                 socket.emit("joinLiveUsersRoom", { Email: email });
