@@ -9,7 +9,7 @@ const skthandler = (io) => {
         console.log("User connected:", socket.id);
 
         socket.on("joinLiveUsersRoom", async ({ Email }) => {
-            // Update socketId in DB
+            console.log("joinLiveUsersRoom received for:", Email);    
             await User.findOneAndUpdate({ Email: Email }, { socketId: socket.id });
 
             const user = await User.findOne({ Email: Email });
