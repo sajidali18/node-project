@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import "./HomePage.css";
 import { io } from 'socket.io-client';
 
-const socket = io("https://node-project-1-bpts.onrender.com");
-
+const socket = io("https://node-project-1-bpts.onrender.com")
 function HomePage() {
 
     const navigate = useNavigate();
@@ -25,15 +24,6 @@ function HomePage() {
     });
 
     const [errors, setErrors] = useState({});
-    useEffect(() => {
-        socket.on("connect", () => {
-            console.log("Connected to Socket.io server:", socket.id);
-        });
-
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
 
     const handlechange = (e) => {
         setForm({
@@ -42,7 +32,6 @@ function HomePage() {
         });
         setErrors({ ...errors, [e.target.id]: "" });
     };
-
     const validateForm = () => {
         let newErrors = {};
 
@@ -74,7 +63,6 @@ function HomePage() {
 
     const handlesubmit = async (e) => {
         e.preventDefault();
-
         if (!validateForm()) return;
 
         try {
@@ -86,8 +74,13 @@ function HomePage() {
 
             if (response.data.success) {
                 toast.success("Data saved successfully!", { position: "top-center" });
-                socket.emit("joinRoom", "live users");
+                
+                // socket.emit("joinRoom", { room: "live users", user: Form });
 
+                // console.log(`User ${Form.Email} joined the 'live users' room`);
+                // console.log(`Socket ID: ${socket.id}`);
+                // console.log("User Details:", Form);
+                socket.emit("joinLiveUsersRoom", { Email: Form.Email });
                 setForm({
                     First_Name: "",
                     Last_Name: "",
@@ -100,6 +93,8 @@ function HomePage() {
                     State: "",
                     Country: "",
                 });
+                    navigate("/room", { state: { email: Form.Email } });
+
             } else {
                 toast.error("Server error, please try again!", { position: "top-center" });
             }
@@ -109,7 +104,6 @@ function HomePage() {
             });
         }
     };
-
     return (
         <div className="container">
             <ToastContainer />
@@ -175,11 +169,12 @@ function HomePage() {
                             <small className="text-danger">{errors.Country}</small>
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-primary">Save</button>
+                    <button type="submit" className="btn btn-primary" ><Link to='/' id='green'>Save</Link></button>
                 </form>
                 <button className="btn btn-info mt-3" onClick={() => navigate("/all")}>
                     View Users
                 </button>
+                <button type="submit"><Link to= '/login'>Login</Link></button>
             </div>
         </div>
     );

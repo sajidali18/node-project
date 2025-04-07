@@ -11,3 +11,14 @@
     border-radius: 10px;
     width: 100%;
 }
+button {
+    margin-top: 10px;
+    width: 100%;
+    /* Full width button */
+    padding: 7px;
+    background-color: #1637dc;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
