@@ -16,8 +16,8 @@ const server = http.createServer(app);
 
 // ✅ Define allowed origins
 const allowedOrigins = [
-    "http://localhost:5173"
-    // "https://phenomenal-moxie-0f5f18.netlify.app"
+    // "http://localhost:5173"
+    "https://phenomenal-moxie-0f5f18.netlify.app"
 ];
 
 // ✅ CORS configuration
