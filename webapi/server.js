@@ -16,8 +16,8 @@ const server = http.createServer(app);
 
 // ✅ Define allowed origins
 const allowedOrigins = [
-    "http://localhost:5173",
-    "https://phenomenal-moxie-0f5f18.netlify.app"
+    "http://localhost:5173"
+    // "https://phenomenal-moxie-0f5f18.netlify.app"
 ];
 
 // ✅ CORS configuration
@@ -30,7 +30,7 @@ const corsOptions = {
 
 // ✅ Apply CORS middleware for HTTP requests
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// app.options('*', cors(corsOptions));
 
 // ✅ Apply middleware to set headers for all responses
 app.use((req, res, next) => {
